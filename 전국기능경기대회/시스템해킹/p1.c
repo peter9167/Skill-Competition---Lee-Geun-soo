@@ -1,7 +1,7 @@
 //p1.c
 #include<stdio.h>
 
-int main(int argc, char *argv[])
+int main(void)
 {
 	int s=0, data=-1;
 	do{
