@@ -1,0 +1,9 @@
+
+자료 -> DATA -> 저장(메모리:RAM)
+
+DATA 종류
+- 수치 DATA
+- 문자 DATA
+
+
+
