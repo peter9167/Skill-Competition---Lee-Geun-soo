@@ -1,0 +1,82 @@
+A-RT 네트워크 설정
+ 1) A-SRV에 A-PC를 위한 DHCP 서버를 구성(pool name: A-PC-DHCP)
+   : DNS 서버 주소는 B-SRV주소를 사용
+
+ 2) A-RT 기초 설정
+   : 가능한 모든 암호는 MD5 암호화되어 저장되어야 하고, 불가능한 암호의 경우 인코딩되어 저장되어야 한다.
+   가) 배너설정(A-SW 스위치에도 동일한 설정)
+
+- A-RT 라우터 설정
+A-RT(config)#banner motd #
+Enter TEXT message.  End with the character '#'.
+*****************************************************
+* Unauthorized access to this device is prohibited! *
+*****************************************************
+
+- A-SW 스위치 설정
+A-SW(config)#banner motd #
+Enter TEXT message.  End with the character '#'.
+*****************************************************
+* Unauthorized access to this device is prohibited! *
+*****************************************************
+
+   나) 콘솔에서 발생하는 로그가 A-SRV에 저장되어야 한다.
+시스로그 로깅(Syslog logging) 기법
+라우터에서는 시스로그를 통해 로그 메시지를 리눅스나 윈도우 등 서버의 syslogd 서비스에 전송해 로컬이 아닌 원격지 로그 서버에 저장하도록 할 수 있다. 시스로그에서는 단지 로그 메시지를 받아서 파일에 저장하기만 하면 되는데, 일반적으로 가장 권장하는 방법이다.
+
+1. 로깅 기능 활성화
+A-RT(config)#logging on
+2. 시스로그 로깅 설정하기 
+A-RT(config)#logging trap information
+A-RT(config)#logging 192.168.10.129 // 로그를 보낼 시스로그 서버의 IP
+A-RT(config)#logging facility local6
+
+
+3) A-SW 설정
+ 가) VLAN
+ vlan 10 (cyber) , fa0/1 ~ fa0/6
+ vlan 20 (dmz), fa0/10 ~ fa0/15
+ vlan 99 (secure), 위 포트를 제외한 모든 포트. native vlan
+A-SW(config)#vlan 10
+A-SW(config-vlan)#name cyber
+A-SW(config)#vlan 20
+A-SW(config-vlan)#name dmz
+A-SW(config)#vlan 99
+A-SW(config-vlan)#name secure
+A-SW(config)#int ra fa0/1-24
+A-SW(config-if-range)#sw mo ac
+A-SW(config-if-range)#sw ac vlan 99
+A-SW(config)#int ra fa0/1-6
+A-SW(config-if-range)#sw mo ac
+A-SW(config-if-range)#sw ac vlan 10
+A-SW(config)#int ra fa0/10-15
+A-SW(config-if-range)#sw mo ac
+A-SW(config-if-range)#sw ac vlan 20
+A-SW#sh vlan
+****솔직히 여기까지 적어줬으면 라우터에서 vlan 설정은 알아서 해야함.
+
+ 나) 트렁크
+ 생성된 vlan 정보만 전송되어야 한다.
+A-SW(config)#int g0/1
+A-SW(config-if)#sw mo tr
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
