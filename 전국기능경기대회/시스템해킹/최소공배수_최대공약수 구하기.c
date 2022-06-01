@@ -80,13 +80,13 @@ int lcm(int a, int b, int c) // 최소공배수 반환
    	int l; // 최소공배수 저장 
 	int tmp, i;
    
-   	tmp = mid(a, b, c);
-   	l = gcd(a, b, c); // 최대공약수 
+   	tmp = mid(a, b, c); // 최소값 저장 
+   	l = gcd(a, b, c); // 최대공약수 저장 
    
-   	a /= l;  b /= l;  c /= l;
+   	a /= l;  b /= l;  c /= l; // a,b,c 정수 최대공약수로 나눔 
    
    	i=2;
-   	while(i <= tmp){
+   	while(i <= tmp){ // 3개 정수 중 최소값만큼 반복 
       
       	if(a % i == 0 && b % i == 0){
          	l *= i;
