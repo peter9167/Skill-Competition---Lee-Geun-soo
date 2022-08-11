@@ -1,0 +1,47 @@
+webadmin 으로 로그인
+
+$touch check.sh
+$chmod 700 check.sh
+
+$vi check.sh
+
+#!/bin/bash
+cnt_inact=0
+cnt_fail=0
+
+
+while :
+do
+        http=$(systemctl is-active apache2)
+
+        if [ $http == "inactive" ]
+        then
+                cnt_inact=1
+                msg=`date +%y-%m-%d" "%T`
+                printf "${msg} * apache2 inactived..check the apache2 pacakge!\n" >> error.log
+                echo "web_support12@#$" | sudo -S systemctl restart apache2
+        elif [ $http == "failed" ]
+        then
+                cnt_fail=1
+                msg=`date +%y-%m-%d" "%T`
+                printf "${msg} # apache2 failed..Check the configuration to apache2!\n" >> error.log
+                echo "web_support12@#$" | sudo -S systemctl restart apache2
+
+        else
+                if [ $cnt_inact = 1 ]
+                then
+                        cnt_inact=0
+                        msg=`date +%y-%m-%d" "%T`
+                        printf "${msg} *** Apache2, Actived Now..**\n" >> error.log
+
+                fi
+                if [ $cnt_fail = 1 ]
+                then
+                        cnt_fail=0
+                        msg=`date +%y-%m-%d" "%T`
+                        printf "${msg} ### Apache2 is Running well.. ##\n" >> error.log
+                fi
+
+        fi
+sleep 5
+done
